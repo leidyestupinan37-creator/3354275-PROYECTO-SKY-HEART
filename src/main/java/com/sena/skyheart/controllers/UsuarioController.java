@@ -15,18 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sena.skyheart.dtos.UsuarioDto;
-import com.sena.skyheart.services.UsuarioService; // <-- Importación correcta en singular
+import com.sena.skyheart.services.UsuarioService; 
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
 
-    private final UsuarioService usuarioService; // <-- Cambiado de UsuarioServices a UsuarioService
-
+    private final UsuarioService usuarioService; 
     // 1. Registrar nuevo usuario
     @PostMapping
     public ResponseEntity<UsuarioDto> guardar(
