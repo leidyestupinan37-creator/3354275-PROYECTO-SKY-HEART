@@ -1,66 +1,61 @@
-
 package com.sena.skyheart.mappers;
-
-import org.springframework.stereotype.Component;
 
 import com.sena.skyheart.dtos.ClienteDto;
 import com.sena.skyheart.dtos.ClienteDtoResponse;
 import com.sena.skyheart.models.usuario.Cliente;
+import com.sena.skyheart.models.usuario.TiposCliente;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ClienteMapperImpl implements ClienteMapper {
 
     @Override
     public ClienteDtoResponse toDto(Cliente cliente) {
-
-        // Validar que tenga datos
         if (cliente == null) {
             return null;
         }
 
-        // Convertir de Cliente a ClienteDtoResponse
+        Integer tipoId = cliente.getTipoCliente() != null ? cliente.getTipoCliente().getId() : null;
+        String tipoNombre = cliente.getTipoCliente() != null ? cliente.getTipoCliente().getNombre() : null;
+
         return ClienteDtoResponse.builder()
-
-                // Atributos heredados de UsuarioDto
                 .id(cliente.getId())
-                .numIden(cliente.getNumIde())
-                .nomb(cliente.getNom())
-                .apell(cliente.getApe())
-                .corre(cliente.getCorr())
-                .direc(cliente.getDir())
-                .contras(cliente.getContra())
-                .fechaNaci(cliente.getFechaNac())
-                .tele(cliente.getTel())
-
-                // Atributos propios de ClienteDtoResponse
-                .tipoClienteId(cliente.getTipoCliente().getId())
-                .tipoClienteNombre(cliente.getTipoCliente().getNombre())
-
+                .numIde(cliente.getNumIde())
+                .nom(cliente.getNom())
+                .ape(cliente.getApe())
+                .corr(cliente.getCorr())
+                .dir(cliente.getDir())
+                .fechaNac(cliente.getFechaNac())
+                .tel(cliente.getTel())
+                .tipoClienteId(tipoId)
+                .tipoClienteNombre(tipoNombre)
                 .build();
     }
 
     @Override
     public Cliente toEntidad(ClienteDto clienteDto) {
-
-        // Validar que tenga datos
         if (clienteDto == null) {
             return null;
         }
 
-        // Convertir de ClienteDto a Cliente
-        return Cliente.builder()
-
-                // Atributos heredados de Usuario
-                .numIde(clienteDto.getNumIden())
-                .nom(clienteDto.getNomb())
-                .ape(clienteDto.getApell())
-                .corr(clienteDto.getCorre())
-                .dir(clienteDto.getDirec())
-                .contra(clienteDto.getContras())
-                .fechaNac(clienteDto.getFechaNaci())
-                .tel(clienteDto.getTele())
-
-                // La relación tipoCliente se asigna desde el Service
+        Cliente cliente = Cliente.builder()
+                .id(clienteDto.getId())
+                .numIde(clienteDto.getNumIde())
+                .nom(clienteDto.getNom())
+                .ape(clienteDto.getApe())
+                .corr(clienteDto.getCorr())
+                .dir(clienteDto.getDir())
+                .fechaNac(clienteDto.getFechaNac())
+                .tel(clienteDto.getTel())
                 .build();
+
+        if (clienteDto.getTipoClienteId() != null) {
+            TiposCliente tipoCliente = TiposCliente.builder()
+                    .id(clienteDto.getTipoClienteId())
+                    .build();
+            cliente.setTipoCliente(tipoCliente);
+        }
+
+        return cliente;
     }
 }
