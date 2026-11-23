@@ -78,6 +78,13 @@
         <version>1.6.3</version>
     </dependency>
 
+	<!--dependencia
+		para la seguridad de la aplicación-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 
 	</dependencies>
 
