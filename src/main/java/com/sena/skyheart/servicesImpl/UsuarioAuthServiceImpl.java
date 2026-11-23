@@ -12,10 +12,12 @@ import com.sena.skyheart.repository.RolRepository;
 import com.sena.skyheart.repository.UsuarioAuthRepository;
 import com.sena.skyheart.repository.UsuarioRepository;
 import com.sena.skyheart.services.UsuarioAuthService;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,39 +33,56 @@ public class UsuarioAuthServiceImpl implements UsuarioAuthService {
     private final UsuarioAuthMapper usuarioAuthMapper;
     private final PasswordEncoder passwordEncoder;
 
+    // 1. Crear credenciales
     @Override
     @Transactional
     public UsuarioAuthResponseDto crear(UsuarioAuthCreateDTO dto) {
-        String normalizedUser = dto.getUser() != null ? dto.getUser().trim() : "";
+
+        String normalizedUser = dto.getUser() != null
+                ? dto.getUser().trim()
+                : "";
+
         if (normalizedUser.isEmpty()) {
-            throw new IllegalArgumentException("El nombre de usuario es obligatorio");
+            throw new IllegalArgumentException(
+                    "El nombre de usuario es obligatorio");
         }
 
         if (usuarioAuthRepository.existsByUser(normalizedUser)) {
-            throw new IllegalArgumentException("El nombre de usuario ya existe: " + normalizedUser);
+            throw new IllegalArgumentException(
+                    "El nombre de usuario ya existe: " + normalizedUser);
         }
 
-        if (usuarioAuthRepository.existsByUsuarioId(dto.getUsuarioId())) {
-            throw new IllegalArgumentException("El usuario ya tiene credenciales registradas con id: " + dto.getUsuarioId());
+        if (usuarioAuthRepository.existsByUsuario_Id(dto.getUsuarioId())) {
+            throw new IllegalArgumentException(
+                    "El usuario ya tiene credenciales registradas con id: "
+                            + dto.getUsuarioId());
         }
 
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con id: " + dto.getUsuarioId()));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Usuario no encontrado con id: " + dto.getUsuarioId()));
 
         UsuarioAuth auth = UsuarioAuth.builder()
                 .usuario(usuario)
                 .user(normalizedUser)
                 .pass(passwordEncoder.encode(dto.getPass()))
-                .habilitado(dto.getHabilitado() != null ? dto.getHabilitado() : true)
+                .habilitado(dto.getHabilitado() != null
+                        ? dto.getHabilitado()
+                        : true)
                 .intentosFallidos(0)
                 .build();
 
         Set<UsuarioAuthRol> asignaciones = new HashSet<>();
+
         if (dto.getRoles() != null) {
+
             LocalDateTime ahora = LocalDateTime.now();
+
             for (String nombreRol : dto.getRoles()) {
+
                 Rol rol = rolRepository.findByNombre(nombreRol)
-                        .orElseThrow(() -> new IllegalArgumentException("Rol no encontrado: " + nombreRol));
+                        .orElseThrow(() -> new IllegalArgumentException(
+                                "Rol no encontrado: " + nombreRol));
 
                 UsuarioAuthRol asignacion = UsuarioAuthRol.builder()
                         .usuarioAuth(auth)
@@ -76,66 +95,100 @@ public class UsuarioAuthServiceImpl implements UsuarioAuthService {
                 asignaciones.add(asignacion);
             }
         }
+
         auth.setRoles(asignaciones);
 
         UsuarioAuth guardado = usuarioAuthRepository.save(auth);
+
         return usuarioAuthMapper.toResponseDto(guardado);
     }
 
+    // 2. Listar todos los usuarios autenticados
     @Override
     @Transactional(readOnly = true)
     public List<UsuarioAuthResponseDto> listarTodos() {
-        return usuarioAuthRepository.findAll().stream()
+
+        return usuarioAuthRepository.findAll()
+                .stream()
                 .map(usuarioAuthMapper::toResponseDto)
                 .toList();
     }
 
+    // 3. Buscar usuario autenticado por ID
     @Override
     @Transactional(readOnly = true)
     public UsuarioAuthResponseDto buscarPorId(Long id) {
+
         UsuarioAuth auth = usuarioAuthRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("UsuarioAuth no encontrado con id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "UsuarioAuth no encontrado con id: " + id));
+
         return usuarioAuthMapper.toResponseDto(auth);
     }
 
+    // 4. Iniciar sesión
     @Override
-    @Transactional
+    @Transactional(noRollbackFor = IllegalArgumentException.class)
     public UsuarioAuthResponseDto login(LoginRequestDto request) {
-        String normalizedUser = request.getUser() != null ? request.getUser().trim() : "";
+
+        String normalizedUser = request.getUser() != null
+                ? request.getUser().trim()
+                : "";
+
         UsuarioAuth auth = usuarioAuthRepository.findByUser(normalizedUser)
-                .orElseThrow(() -> new IllegalArgumentException("Credenciales inválidas"));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Credenciales inválidas"));
 
         if (!auth.isHabilitado()) {
-            throw new IllegalStateException("La cuenta está deshabilitada");
+            throw new IllegalStateException(
+                    "La cuenta está deshabilitada");
         }
 
-        if (auth.getBloqueadoHasta() != null && auth.getBloqueadoHasta().isAfter(LocalDateTime.now())) {
-            throw new IllegalStateException("La cuenta está bloqueada temporalmente hasta: " + auth.getBloqueadoHasta());
+        if (auth.getBloqueadoHasta() != null
+                && auth.getBloqueadoHasta().isAfter(LocalDateTime.now())) {
+
+            throw new IllegalStateException(
+                    "La cuenta está bloqueada temporalmente hasta: "
+                            + auth.getBloqueadoHasta());
         }
 
         if (!passwordEncoder.matches(request.getPass(), auth.getPass())) {
-            int intentos = (auth.getIntentosFallidos() != null ? auth.getIntentosFallidos() : 0) + 1;
+
+            int intentos = (auth.getIntentosFallidos() != null
+                    ? auth.getIntentosFallidos()
+                    : 0) + 1;
+
             auth.setIntentosFallidos(intentos);
+
             if (intentos >= 5) {
-                auth.setBloqueadoHasta(LocalDateTime.now().plusMinutes(15));
+                auth.setBloqueadoHasta(
+                        LocalDateTime.now().plusMinutes(15));
             }
+
             usuarioAuthRepository.save(auth);
-            throw new IllegalArgumentException("Credenciales inválidas");
+
+            throw new IllegalArgumentException(
+                    "Credenciales inválidas");
         }
 
         auth.setIntentosFallidos(0);
         auth.setBloqueadoHasta(null);
+
         usuarioAuthRepository.save(auth);
 
         return usuarioAuthMapper.toResponseDto(auth);
     }
 
+    // 5. Eliminar credenciales
     @Override
     @Transactional
     public void eliminar(Long id) {
+
         if (!usuarioAuthRepository.existsById(id)) {
-            throw new IllegalArgumentException("UsuarioAuth no encontrado con id: " + id);
+            throw new IllegalArgumentException(
+                    "UsuarioAuth no encontrado con id: " + id);
         }
+
         usuarioAuthRepository.deleteById(id);
     }
 }

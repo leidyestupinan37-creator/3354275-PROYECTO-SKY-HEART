@@ -10,5 +10,5 @@ public interface UsuarioAuthRepository extends JpaRepository<UsuarioAuth, Long> 
 
     boolean existsByUser(String user);
 
-    boolean existsByUsuarioId(Long usuarioId);
+    boolean existsByUsuario_Id(Long usuarioId);
 }
