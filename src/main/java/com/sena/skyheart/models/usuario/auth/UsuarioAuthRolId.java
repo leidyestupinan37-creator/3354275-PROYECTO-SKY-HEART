@@ -2,7 +2,9 @@ package com.sena.skyheart.models.usuario.auth;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+
 import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,5 +25,5 @@ public class UsuarioAuthRolId implements Serializable {
     private Long usuarioAuthId;
 
     @Column(name = "rol_id", nullable = false)
-    private Long rolId;
+    private Byte rolId;
 }

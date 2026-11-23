@@ -1,6 +1,8 @@
+
 package com.sena.skyheart.models.usuario.auth;
 
 import com.sena.skyheart.models.usuario.Usuario;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,14 +13,16 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
 import lombok.AllArgsConstructor;
-
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-
+import lombok.Setter;
 
 @Entity
 @Table(name = "usuarios_auth")
@@ -26,10 +30,12 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Builder
 public class UsuarioAuth {
 
     @Id
+    private Long id;
+
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -60,12 +66,8 @@ public class UsuarioAuth {
         if (rolAsignado == null) {
             return;
         }
+
         rolAsignado.setUsuarioAuth(this);
-        Long authId = this.usuario != null ? this.usuario.getId() : null;
-        Long rolId = (rolAsignado.getRol() != null && rolAsignado.getRol().getId() != null)
-        ? rolAsignado.getRol().getId().longValue()
-        : null;
-        }
         this.roles.add(rolAsignado);
     }
 }
