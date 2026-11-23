@@ -1,17 +1,21 @@
 package com.sena.skyheart.models.usuario;
 
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "administrador")
-@Getter @Setter
+@PrimaryKeyJoinColumn(name = "administrador_id")
+@Getter
+@Setter
 @NoArgsConstructor
-
+@SuperBuilder
 public class Administrador extends Usuario {
 
 }
