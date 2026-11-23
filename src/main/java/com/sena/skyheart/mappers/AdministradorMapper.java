@@ -1,10 +1,10 @@
+
 package com.sena.skyheart.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.sena.skyheart.dtos.AdministradorDto;
-
 import com.sena.skyheart.models.usuario.Administrador;
 
 @Mapper(componentModel = "spring")
@@ -19,7 +19,7 @@ public interface AdministradorMapper {
     @Mapping(source = "contra", target = "contras")
     @Mapping(source = "fechaNac", target = "fechaNaci")
     @Mapping(source = "tel", target = "tele")
-    AdministradorDto ToDto(Administrador administrador);
+    AdministradorDto toDto(Administrador administrador);
 
     // Convertir de DTO a Entidad
     @Mapping(source = "numIden", target = "numIde")
@@ -30,5 +30,5 @@ public interface AdministradorMapper {
     @Mapping(source = "contras", target = "contra")
     @Mapping(source = "fechaNaci", target = "fechaNac")
     @Mapping(source = "tele", target = "tel")
-    Administrador ToEntidad(AdministradorDto administradorDto);
+    Administrador toEntidad(AdministradorDto administradorDto);
 }

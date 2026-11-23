@@ -78,7 +78,17 @@
         <version>1.6.3</version>
     </dependency>
 
+	<!--dependencia
+		para la seguridad de la aplicación-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+
 	</dependencies>
+
+
 
 	<build>
 		<plugins>
@@ -108,7 +118,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.38</version>
+                            <version>1.18.48</version>
                         </path>
 
                     </annotationProcessorPaths>
