@@ -1,3 +1,4 @@
+
 package com.sena.skyheart.mappers;
 
 import org.mapstruct.Mapper;
@@ -30,4 +31,8 @@ public interface AdministradorMapper {
     @Mapping(source = "fechaNaci", target = "fechaNac")
     @Mapping(source = "tele", target = "tel")
     Administrador toEntidad(AdministradorDto administradorDto);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> fd62b46a5aecbce00e98cd1d9df13506beb871cb

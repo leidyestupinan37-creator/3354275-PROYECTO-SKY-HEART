@@ -8,6 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+<<<<<<< HEAD
+=======
+
+>>>>>>> fd62b46a5aecbce00e98cd1d9df13506beb871cb
 
 @Entity
 @Table(name = "administrador")
