@@ -32,3 +32,4 @@ public interface AdministradorMapper {
     @Mapping(source = "tele", target = "tel")
     Administrador toEntidad(AdministradorDto administradorDto);
 
+}

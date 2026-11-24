@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-main
 @Entity
 @Table(name = "administrador")
 @PrimaryKeyJoinColumn(name = "administrador_id")

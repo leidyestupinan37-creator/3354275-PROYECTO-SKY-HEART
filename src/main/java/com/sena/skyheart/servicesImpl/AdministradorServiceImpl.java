@@ -14,6 +14,7 @@ import com.sena.skyheart.services.AdministradorService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+
 @Service
 @RequiredArgsConstructor
 public class AdministradorServiceImpl implements AdministradorService {
@@ -97,4 +98,5 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .map(administradorMapper::toDto)
                 .toList();
     }
+}
 
