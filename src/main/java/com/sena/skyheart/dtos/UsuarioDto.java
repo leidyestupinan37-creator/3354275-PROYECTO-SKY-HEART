@@ -1,23 +1,21 @@
 package com.sena.skyheart.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Getter @Setter
+@Data
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 public class UsuarioDto {
 
     private Long id;
-
     @NotBlank(message = "El numero de identificacion es obligatorio")
     @Size(min = 10, max = 10,
         message = "El numero de identificacion debe tener 10 caracteres")
@@ -58,4 +56,5 @@ public class UsuarioDto {
     @Size(min = 10, max = 10,
         message = "El telefono debe tener 10 caracteres")
     private String tele;
+
 }

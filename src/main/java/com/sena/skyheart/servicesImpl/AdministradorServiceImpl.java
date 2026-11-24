@@ -1,3 +1,4 @@
+
 package com.sena.skyheart.servicesImpl;
 
 import java.util.List;
@@ -96,4 +97,4 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .map(administradorMapper::toDto)
                 .toList();
     }
-}
+
