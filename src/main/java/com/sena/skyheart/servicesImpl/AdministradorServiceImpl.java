@@ -24,7 +24,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public AdministradorDto guardar(AdministradorDto administradorDto) {
         // Convertir DTO a entidad
-        Administrador administrador = administradorMapper.ToEntidad(administradorDto);
+        Administrador administrador = administradorMapper.toEntidad(administradorDto);
 
         // El ID debe ir en null para que la BD lo genere/gestione según corresponda
         administrador.setId(null);
@@ -32,7 +32,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         // Guardar en la base de datos
         Administrador administradorGuardado = administradorRepository.save(administrador);
 
-        return administradorMapper.ToDto(administradorGuardado);
+        return administradorMapper.toDto(administradorGuardado);
     }
 
     // 2. Listar todos los administradores
@@ -40,7 +40,7 @@ public class AdministradorServiceImpl implements AdministradorService {
     public List<AdministradorDto> listarTodos() {
         return administradorRepository.findAll()
                 .stream()
-                .map(administradorMapper::ToDto)
+                .map(administradorMapper::toDto)
                 .toList();
     }
 
@@ -50,7 +50,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         Administrador administrador = administradorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Administrador no encontrado: " + id));
 
-        return administradorMapper.ToDto(administrador);
+        return administradorMapper.toDto(administrador);
     }
 
     // 4. Actualizar administrador
@@ -70,7 +70,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 
         Administrador administradorActualizado = administradorRepository.save(administradorExistente);
 
-        return administradorMapper.ToDto(administradorActualizado);
+        return administradorMapper.toDto(administradorActualizado);
     }
 
     // 5. Eliminar administrador
@@ -86,14 +86,14 @@ public class AdministradorServiceImpl implements AdministradorService {
     @Override
     public List<AdministradorDto> guardarTodos(List<AdministradorDto> administradorDtos) {
         List<Administrador> administradores = administradorDtos.stream()
-                .map(administradorMapper::ToEntidad)
+                .map(administradorMapper::toEntidad)
                 .peek(admin -> admin.setId(null))
                 .toList();
 
         List<Administrador> administradoresGuardados = administradorRepository.saveAll(administradores);
 
         return administradoresGuardados.stream()
-                .map(administradorMapper::ToDto)
+                .map(administradorMapper::toDto)
                 .toList();
     }
 }

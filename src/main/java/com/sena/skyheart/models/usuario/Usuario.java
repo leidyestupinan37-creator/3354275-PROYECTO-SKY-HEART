@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-
 @Entity
 @Table(name = "usuario")
 @Inheritance(strategy = InheritanceType.JOINED)
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 public class Usuario {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "numero de identificacion", nullable = false, length = 10)
@@ -37,18 +37,18 @@ public class Usuario {
     @Column(name = "apellido", nullable = false, length = 60)
     private String ape;
 
-    @Column (name = "correo", nullable = false, length = 60)
+    @Column(name = "correo", nullable = false, length = 60)
     private String corr;
 
-    @Column (name = "direccion", nullable = false, length = 20)
+    @Column(name = "direccion", nullable = false, length = 20)
     private String dir;
 
-    @Column (name = "contraseña", nullable = false, length = 60)
+    @Column(name = "contraseña", nullable = false, length = 60)
     private String contra;
 
-    @Column (name = "fecha de nacimiento", nullable = false, length = 10)
+    @Column(name = "fecha de nacimiento", nullable = false, length = 10)
     private String fechaNac;
 
-    @Column (name = "telefono", nullable = false, length = 10)
+    @Column(name = "telefono", nullable = false, length = 10)
     private String tel;
 }
