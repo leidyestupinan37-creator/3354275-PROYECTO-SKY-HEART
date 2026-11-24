@@ -56,4 +56,8 @@ public class UsuarioDto {
     @Size(min = 10, max = 10,
         message = "El telefono debe tener 10 caracteres")
     private String tele;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8575adf5a06fb473cd55418fb7652f13cb933331
 }
