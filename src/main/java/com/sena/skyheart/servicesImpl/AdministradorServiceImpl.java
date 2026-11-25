@@ -97,4 +97,5 @@ public class AdministradorServiceImpl implements AdministradorService {
                 .map(administradorMapper::toDto)
                 .toList();
     }
+}
 
